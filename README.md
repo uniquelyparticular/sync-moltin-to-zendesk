@@ -1,8 +1,10 @@
 # @particular./sync-moltin-to-zendesk
 
-> Add a Zendesk Sunshine Evenet when an order is created or modified in Moltin
+> Add a Zendesk Sunshine Event when an order is created or modified in Moltin
 
 Asynchronous microservice that is triggered by [moltin](https://moltin.com) webhooks to create a Sunshine Event inside of [Zendesk](https://zendesk.com).
+
+⚠️ Zendesk [Sunshine Event API](https://develop.zendesk.com/hc/en-us/community/posts/360004233828-About-the-Events-API) is only available via Early Access BETA registration.
 
 Built with [Micro](https://github.com/zeit/micro)! 🤩
 
@@ -25,7 +27,9 @@ Find your `MOLTIN_CLIENT_ID` and `MOLTIN_CLIENT_SECRET` inside of your [moltin D
 
 `MOLTIN_WEBHOOK_SECRET` can be anything you want.
 
-TODO: add instructions on ZENDESK keys above
+While logged in to your Zendesk instance create a new User to run the Webhooks under by going to `Settings` > `People` > `Add User` > `Role: Staff`; this email address will be used as your `ZENDESK_INTEGRATION_EMAIL` above.
+
+Find your `ZENDESK_INTEGRATION_SECRET` within your Zendesk instance by going to `Settings` > `API` > enable `Token Access` > add `Active API Tokens [+]` > `API Token`.
 
 ## 📦 Package
 
