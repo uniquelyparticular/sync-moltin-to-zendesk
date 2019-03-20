@@ -1,0 +1,17 @@
+{
+  "name": "demo-sync-moltin-to-zendesk",
+  "alias": "particular-demo-sync-moltin-to-zendesk.now.sh",
+  "env": {
+    "NODE_ENV": "production",
+    "ZENDESK_INTEGRATION_EMAIL": "@demo-zendesk-integration-email",
+    "ZENDESK_INTEGRATION_SECRET": "@demo-zendesk-integration-secret",
+    "STRIPE_SECRET_KEY": "@demo-stripe-secret-key",
+    "STRIPE_WEBHOOK_SECRET": "@demo-stripe-zendesk-webhook-secret"
+  },
+  "builds": [
+    {
+      "src": "*.js",
+      "use": "@now/node"
+    }
+  ]
+}
