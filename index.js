@@ -60,97 +60,93 @@ module.exports = cors(async (req, res) => {
   )
     return send(res, 401)
 
-  // try {
-  const { triggered_by, resources: body } = await json(req)
+  try {
+    const { triggered_by, resources: body } = await json(req)
 
-  const {
-    data: { type: observable, id }
-  } = JSON.parse(body)
-
-  const event = triggered_by.split('.')[1] //event is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
-
-  if (observable === 'order') {
-    // just locking down to orders to protect code below
     const {
-      data: {
-        status: order_status,
-        payment: payment_status,
-        shipping: shipping_status,
-        customer: { name: customer_name, email },
-        meta: {
-          display_price: {
-            with_tax: { formatted: total_paid }
+      data: { type: observable, id }
+    } = JSON.parse(body)
+
+    const event = triggered_by.split('.')[1] //event is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
+
+    if (observable === 'order') {
+      // just locking down to orders to protect code below
+      const {
+        data: {
+          status: order_status,
+          payment: payment_status,
+          shipping: shipping_status,
+          customer: { name: customer_name, email },
+          meta: {
+            display_price: {
+              with_tax: { formatted: total_paid }
+            }
+          },
+          relationships: {
+            items: { data: items },
+            customer: {
+              data: { id: customer_id }
+            }
+          }
+        }
+      } = await moltin.get(`${observable}s/${id}`)
+
+      const payload = {
+        profile: {
+          source: 'support',
+          identifiers: {
+            moltin_id: customer_id,
+            email: email
           }
         },
-        relationships: {
-          items: { data: items },
-          customer: {
-            data: { id: customer_id }
+        event: {
+          source: 'moltin',
+          type: `moltin-${observable}-${event}`,
+          description: _toCamelcase(`${observable} ${event}`),
+          properties: {
+            'Customer Name': customer_name,
+            'Order ID': id,
+            'Order Status': order_status,
+            'Order Total': total_paid,
+            'Payment Status': payment_status,
+            'Shipping Status': shipping_status
           }
         }
       }
-    } = await moltin.get(`${observable}s/${id}`)
+      console.log('payload', payload)
 
-    const payload = {
-      profile: {
-        source: 'support',
-        identifiers: {
-          moltin_id: customer_id,
-          email: email
-        }
-      },
-      event: {
-        source: 'moltin',
-        type: `moltin-${observable}-${event}`,
-        description: _toCamelcase(`${observable} ${event}`),
-        properties: {
-          'Customer Name': customer_name,
-          'Order ID': id,
-          'Order Status': order_status,
-          'Order Total': total_paid,
-          'Payment Status': payment_status,
-          'Shipping Status': shipping_status
-        }
-      }
+      fetch('https://d3v-uniquelyparticular.zendesk.com/api/cdp/v2/track', {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
+              process.env.ZENDESK_INTEGRATION_SECRET
+            }`
+          ).toString('base64')}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+        .then(response => {
+          if (response.ok && response.status < 299) {
+            return send(res, 200, JSON.stringify({ received: true }))
+          } else {
+            return send(res, 500, 'Error')
+          }
+        })
+        .catch(error => {
+          console.log('error', error)
+          const jsonError = _toJSON(error)
+          return send(
+            res,
+            jsonError.type === 'StripeSignatureVerificationError' ? 401 : 500,
+            jsonError
+          )
+        })
     }
-    console.log('payload', payload)
-
-    fetch('https://d3v-uniquelyparticular.zendesk.com/api/cdp/v2/track', {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
-            process.env.ZENDESK_INTEGRATION_SECRET
-          }`
-        ).toString('base64')}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify(payload)
-    })
-      .then(response => {
-        if (response.ok && response.status < 299) {
-          return send(res, 200, JSON.stringify({ received: true }))
-        } else {
-          return send(res, 500, 'Error')
-        }
-      })
-      .catch(error => {
-        console.log('error', error)
-        const jsonError = _toJSON(error)
-        return send(
-          res,
-          jsonError.type === 'StripeSignatureVerificationError' ? 401 : 500,
-          jsonError
-        )
-      })
+  } catch (error) {
+    const jsonError = _toJSON(error)
+    return send(res, 500, jsonError)
   }
-  // } catch (error) {
-  //   const jsonError = _toJSON(error)
-  //   return send(
-  //     res,
-  //     500,
-  //     jsonError
-  //   )
-  // }
 })

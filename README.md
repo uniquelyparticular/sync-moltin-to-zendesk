@@ -1,5 +1,7 @@
 # @particular./sync-moltin-to-zendesk
 
+[![npm version](https://badge.fury.io/js/%40particular.%2Fsync-moltin-to-zendesk.svg)](https://badge.fury.io/js/%40particular.%2Fsync-moltin-to-zendesk)
+
 > Add a Zendesk Sunshine Event when an order is created or modified in Moltin
 
 Asynchronous microservice that is triggered by [moltin](https://moltin.com) webhooks to create a Sunshine Event inside of [Zendesk](https://zendesk.com).
