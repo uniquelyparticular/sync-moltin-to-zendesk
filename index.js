@@ -115,19 +115,22 @@ module.exports = cors(async (req, res) => {
       }
       console.log('payload', payload)
 
-      fetch('https://d3v-uniquelyparticular.zendesk.com/api/cdp/v2/track', {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
-              process.env.ZENDESK_INTEGRATION_SECRET
-            }`
-          ).toString('base64')}`,
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
+      fetch(
+        `https://${process.env.ZENDESK_SUBDOMAIN}.zendesk.com/api/cdp/v2/track`,
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
+                process.env.ZENDESK_INTEGRATION_SECRET
+              }`
+            ).toString('base64')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify(payload)
+        }
+      )
         .then(response => {
           if (response.ok && response.status < 299) {
             return send(res, 200, JSON.stringify({ received: true }))
