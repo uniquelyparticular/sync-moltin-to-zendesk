@@ -20,6 +20,7 @@ Create a `.env` at the project root with the following credentials:
 MOLTIN_CLIENT_ID=
 MOLTIN_CLIENT_SECRET=
 MOLTIN_WEBHOOK_SECRET=
+ZENDESK_SUBDOMAIN=
 ZENDESK_INTEGRATION_EMAIL=
 ZENDESK_INTEGRATION_SECRET=
 
@@ -28,6 +29,8 @@ ZENDESK_INTEGRATION_SECRET=
 Find your `MOLTIN_CLIENT_ID` and `MOLTIN_CLIENT_SECRET` inside of your [moltin Dashboard](https://dashboard.moltin.com)'s API keys.
 
 `MOLTIN_WEBHOOK_SECRET` can be anything you want.
+
+`ZENDESK_SUBDOMAIN` is the first part of the URL for your Zendesk account (ie. https://{ZENDESK_SUBDOMAIN}.zendesk.com/).
 
 While logged in to your Zendesk instance create a new User to run the Webhooks under by going to `Settings` > `People` > `Add User` > `Role: Staff`; this email address will be used as your `ZENDESK_INTEGRATION_EMAIL` above.
 
