@@ -148,11 +148,7 @@ module.exports = cors(async (req, res) => {
           .catch(error => {
             console.log('error', error)
             const jsonError = _toJSON(error)
-            return send(
-              res,
-              jsonError.type === 'StripeSignatureVerificationError' ? 401 : 500,
-              jsonError
-            )
+            return send(res, 500, jsonError)
           })
       } else {
         console.error('missing billing_email')
