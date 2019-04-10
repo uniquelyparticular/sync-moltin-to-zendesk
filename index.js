@@ -71,88 +71,93 @@ module.exports = cors(async (req, res) => {
 
     if (observable === 'order' && observable_id) {
       // just locking down to orders to protect code below
-      const {
-        data: {
-          status: order_status,
-          payment: payment_status,
-          shipping: shipping_status,
-          customer: { name: customer_name, email },
-          meta: {
-            display_price: {
-              with_tax: { formatted: total_paid }
+      if (billing_email) {
+        const {
+          data: {
+            status: order_status,
+            payment: payment_status,
+            shipping: shipping_status,
+            customer: { name: customer_name, email: billing_email },
+            meta: {
+              display_price: {
+                with_tax: { formatted: total_paid }
+              }
+            },
+            relationships: {
+              items: { data: items },
+              customer: {
+                data: { id: customer_id }
+              }
+            }
+          }
+        } = await moltin.get(`${observable}s/${observable_id}`)
+
+        const payload = {
+          profile: {
+            source: 'support',
+            identifiers: {
+              email: billing_email,
+              moltin_id: customer_id
             }
           },
-          relationships: {
-            items: { data: items },
-            customer: {
-              data: { id: customer_id }
+          event: {
+            source: 'moltin',
+            type: `moltin-${observable}-${event}`,
+            description: _toCamelcase(`${observable} ${event}`),
+            properties: {
+              'Customer Name': customer_name,
+              'Order ID': observable_id,
+              'Order Status': order_status,
+              'Order Total': total_paid,
+              'Payment Status': payment_status,
+              'Shipping Status': shipping_status
             }
           }
         }
-      } = await moltin.get(`${observable}s/${observable_id}`)
+        console.log('payload', payload)
 
-      const payload = {
-        profile: {
-          source: 'support',
-          identifiers: {
-            moltin_id: customer_id,
-            email: email
+        fetch(
+          `https://${
+            process.env.ZENDESK_SUBDOMAIN
+          }.zendesk.com/api/sunshine/track`,
+          {
+            headers: {
+              Authorization: `Basic ${Buffer.from(
+                `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
+                  process.env.ZENDESK_INTEGRATION_SECRET
+                }`
+              ).toString('base64')}`,
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(payload)
           }
-        },
-        event: {
-          source: 'moltin',
-          type: `moltin-${observable}-${event}`,
-          description: _toCamelcase(`${observable} ${event}`),
-          properties: {
-            'Customer Name': customer_name,
-            'Order ID': observable_id,
-            'Order Status': order_status,
-            'Order Total': total_paid,
-            'Payment Status': payment_status,
-            'Shipping Status': shipping_status
-          }
-        }
-      }
-      console.log('payload', payload)
-
-      fetch(
-        `https://${
-          process.env.ZENDESK_SUBDOMAIN
-        }.zendesk.com/api/sunshine/track`,
-        {
-          headers: {
-            Authorization: `Basic ${Buffer.from(
-              `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
-                process.env.ZENDESK_INTEGRATION_SECRET
-              }`
-            ).toString('base64')}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          method: 'POST',
-          body: JSON.stringify(payload)
-        }
-      )
-        .then(response => {
-          if (response.ok && response.status < 299) {
+        )
+          .then(response => {
+            if (response.ok && response.status < 299) {
+              return send(
+                res,
+                200,
+                JSON.stringify({ received: true, order_id: observable_id })
+              )
+            } else {
+              return send(res, 500, 'Error')
+            }
+          })
+          .catch(error => {
+            console.log('error', error)
+            const jsonError = _toJSON(error)
             return send(
               res,
-              200,
-              JSON.stringify({ received: true, order_id: observable_id })
+              jsonError.type === 'StripeSignatureVerificationError' ? 401 : 500,
+              jsonError
             )
-          } else {
-            return send(res, 500, 'Error')
-          }
-        })
-        .catch(error => {
-          console.log('error', error)
-          const jsonError = _toJSON(error)
-          return send(
-            res,
-            jsonError.type === 'StripeSignatureVerificationError' ? 401 : 500,
-            jsonError
-          )
-        })
+          })
+      } else {
+        console.error('missing billing_email')
+        return send(res, 200, JSON.stringify({ received: true, order_id }))
+      }
     } else {
       console.error('missing order_id')
       return send(
