@@ -64,12 +64,12 @@ module.exports = cors(async (req, res) => {
     const { triggered_by, resources: body } = await json(req)
 
     const {
-      data: { type: observable, id }
+      data: { type: observable, id: observable_id }
     } = JSON.parse(body)
 
     const event = triggered_by.split('.')[1] //event is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
 
-    if (observable === 'order') {
+    if (observable === 'order' && observable_id) {
       // just locking down to orders to protect code below
       const {
         data: {
@@ -89,7 +89,7 @@ module.exports = cors(async (req, res) => {
             }
           }
         }
-      } = await moltin.get(`${observable}s/${id}`)
+      } = await moltin.get(`${observable}s/${observable_id}`)
 
       const payload = {
         profile: {
@@ -105,7 +105,7 @@ module.exports = cors(async (req, res) => {
           description: _toCamelcase(`${observable} ${event}`),
           properties: {
             'Customer Name': customer_name,
-            'Order ID': id,
+            'Order ID': observable_id,
             'Order Status': order_status,
             'Order Total': total_paid,
             'Payment Status': payment_status,
@@ -135,7 +135,11 @@ module.exports = cors(async (req, res) => {
       )
         .then(response => {
           if (response.ok && response.status < 299) {
-            return send(res, 200, JSON.stringify({ received: true }))
+            return send(
+              res,
+              200,
+              JSON.stringify({ received: true, order_id: observable_id })
+            )
           } else {
             return send(res, 500, 'Error')
           }
@@ -149,6 +153,13 @@ module.exports = cors(async (req, res) => {
             jsonError
           )
         })
+    } else {
+      console.error('missing order_id')
+      return send(
+        res,
+        200,
+        JSON.stringify({ received: true, order_id: 'null' })
+      )
     }
   } catch (error) {
     const jsonError = _toJSON(error)
