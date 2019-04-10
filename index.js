@@ -6,6 +6,7 @@ const moltin = new createClient({
   client_secret: process.env.MOLTIN_CLIENT_SECRET,
   application: 'demo-sync-stripe-to-moltin'
 })
+
 const cors = require('micro-cors')({
   allowMethods: ['POST'],
   exposeHeaders: ['x-moltin-secret-key'],
