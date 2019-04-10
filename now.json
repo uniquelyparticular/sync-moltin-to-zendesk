@@ -3,6 +3,7 @@
   "alias": "particular-demo-sync-moltin-to-zendesk.now.sh",
   "env": {
     "NODE_ENV": "production",
+    "ZENDESK_SUBDOMAIN": "@demo-zendesk-subdomain",
     "ZENDESK_INTEGRATION_EMAIL": "@demo-zendesk-integration-email",
     "ZENDESK_INTEGRATION_SECRET": "@demo-zendesk-integration-secret",
     "STRIPE_SECRET_KEY": "@demo-stripe-secret-key",
