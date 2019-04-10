@@ -116,7 +116,9 @@ module.exports = cors(async (req, res) => {
       console.log('payload', payload)
 
       fetch(
-        `https://${process.env.ZENDESK_SUBDOMAIN}.zendesk.com/api/cdp/v2/track`,
+        `https://${
+          process.env.ZENDESK_SUBDOMAIN
+        }.zendesk.com/api/sunshine/track`,
         {
           headers: {
             Authorization: `Basic ${Buffer.from(
