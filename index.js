@@ -72,27 +72,27 @@ module.exports = cors(async (req, res) => {
 
     if (observable === 'order' && observable_id) {
       // just locking down to orders to protect code below
-      if (billing_email) {
-        const {
-          data: {
-            status: order_status,
-            payment: payment_status,
-            shipping: shipping_status,
-            customer: { name: customer_name, email: billing_email },
-            meta: {
-              display_price: {
-                with_tax: { formatted: total_paid }
-              }
-            },
-            relationships: {
-              items: { data: items },
-              customer: {
-                data: { id: customer_id }
-              }
+      const {
+        data: {
+          status: order_status,
+          payment: payment_status,
+          shipping: shipping_status,
+          customer: { name: customer_name, email: billing_email },
+          meta: {
+            display_price: {
+              with_tax: { formatted: total_paid }
+            }
+          },
+          relationships: {
+            items: { data: items },
+            customer: {
+              data: { id: customer_id }
             }
           }
-        } = await moltin.get(`${observable}s/${observable_id}`)
+        }
+      } = await moltin.get(`${observable}s/${observable_id}`)
 
+      if (billing_email) {
         const payload = {
           profile: {
             source: 'support',
