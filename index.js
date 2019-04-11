@@ -84,7 +84,7 @@ module.exports = cors(async (req, res) => {
             }
           },
           relationships: {
-            items: { data: items },
+            items: { data: order_items },
             customer: {
               data: { id: customer_id }
             }
@@ -147,7 +147,6 @@ module.exports = cors(async (req, res) => {
             }
           })
           .catch(error => {
-            console.log('error', error)
             const jsonError = _toJSON(error)
             return send(res, 500, jsonError)
           })
