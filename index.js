@@ -53,7 +53,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 module.exports = cors(async (req, res) => {
   if (req.method === 'OPTIONS') {
-    return send(res, 200, 'ok!')
+    return send(res, 204)
   }
   if (
     (await req.headers['x-moltin-secret-key']) !=
@@ -68,9 +68,9 @@ module.exports = cors(async (req, res) => {
       data: { type: observable, id: observable_id }
     } = JSON.parse(body)
 
-    const event = triggered_by.split('.')[1] //event is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
+    const [type, trigger] = triggered_by.split('.') //type is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
 
-    if (observable === 'order' && observable_id) {
+    if ((type === observable) === 'order' && observable_id) {
       // just locking down to orders to protect code below
       const {
         data: {
@@ -103,8 +103,8 @@ module.exports = cors(async (req, res) => {
           },
           event: {
             source: 'moltin',
-            type: `moltin-${observable}-${event}`,
-            description: _toCamelcase(`${observable} ${event}`),
+            type: `moltin-${observable}-${type}`,
+            description: _toCamelcase(`${observable} ${type}`),
             properties: {
               'Customer Name': customer_name,
               'Order ID': observable_id,
