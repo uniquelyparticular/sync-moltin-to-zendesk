@@ -1,6 +1,6 @@
 # @particular./sync-moltin-to-zendesk
 
-[![npm version](https://badge.fury.io/js/%40particular.%2Fsync-moltin-to-zendesk.svg)](https://badge.fury.io/js/%40particular.%2Fsync-moltin-to-zendesk)
+[![npm version](https://img.shields.io/npm/v/@particular./sync-moltin-to-zendesk.svg)](https://www.npmjs.com/package/@particular./sync-moltin-to-zendesk) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![CircleCI](https://circleci.com/gh/uniquelyparticular/sync-moltin-to-zendesk.svg?style=svg)](https://circleci.com/gh/uniquelyparticular/sync-moltin-to-zendesk)
 
 > Add a Zendesk Sunshine Event when an order is created or modified in Moltin
 
@@ -70,7 +70,7 @@ Next, enter the `ngrok URL` from above and `MOLTIN_WEBHOOK_SECRET` that you save
 
 ![URL and Secret Key](https://user-images.githubusercontent.com/950181/52846929-ca957980-3102-11e9-9a20-23b8139767ee.png)
 
-Now finally you'll want to configure what Moltin Observables will cause this webhook to be invoked. In this example we want to monitor the `Order` observable and select the `Created`,`Fulfilled` and `Paid/Captured` box.
+Now finally you'll want to configure what Moltin Observables will cause this webhook to be invoked. In this example we want to monitor the `Order` observable and select the `Created`, `Fulfilled` and `Paid/Captured` box.
 
 ![Observes selection](https://user-images.githubusercontent.com/950181/52851227-76dc5d80-310d-11e9-9dff-70b7daaf21e8.png)
 
