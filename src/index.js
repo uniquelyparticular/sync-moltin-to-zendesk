@@ -69,9 +69,9 @@ module.exports = cors(async (req, res) => {
     } = JSON.parse(body)
 
     const [type, trigger] = triggered_by.split('.') //type is 'order', trigger is `created`,`updated`,`fulfilled` or `paid`
-    console.log('type', type)
-    console.log('observable', observable)
-    console.log('observable_id', observable_id)
+    // console.log('type', type)
+    // console.log('observable', observable)
+    // console.log('observable_id', observable_id)
 
     if (type === 'order' && observable === 'order' && observable_id) {
       // just locking down to orders to protect code below
