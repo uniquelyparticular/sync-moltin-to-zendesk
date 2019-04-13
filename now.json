@@ -10,7 +10,7 @@
     "MOLTIN_CLIENT_SECRET": "@demo-moltin-client-secret",
     "MOLTIN_WEBHOOK_SECRET": "@demo-moltin-webhook-secret"
   },
-  "routes": [{ "src": "/(.*)", "dest": "/src" }],
+  "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
   "builds": [
     {
       "src": "src/*.js",
