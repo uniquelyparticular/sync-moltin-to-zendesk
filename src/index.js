@@ -4,7 +4,7 @@ const { createClient } = require('@moltin/request')
 const moltin = new createClient({
   client_id: process.env.MOLTIN_CLIENT_ID,
   client_secret: process.env.MOLTIN_CLIENT_SECRET,
-  application: 'demo-sync-stripe-to-moltin'
+  application: 'demo-sync-moltin-to-zendesk'
 })
 
 const cors = require('micro-cors')({
