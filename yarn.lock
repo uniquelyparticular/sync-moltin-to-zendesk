@@ -285,7 +285,7 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
-"@moltin/request@^2.0.0":
+"@moltin/request@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@moltin/request/-/request-2.0.0.tgz#aad605116145a6c2b02c8ba651ac72fac702aba7"
   integrity sha512-uYu6vqY8WmxmuyMOQvF/AccZtnv0IZmhBCeTVhok0PTlIrckuUx2k6lYVjRZIujwZd9zXCvdDTvO1xgVD/TkgQ==
