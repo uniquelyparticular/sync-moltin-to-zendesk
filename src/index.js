@@ -1,7 +1,7 @@
 const { json, send } = require('micro')
 const fetch = require('node-fetch')
-const { createClient } = require('@moltin/request')
-const moltin = new createClient({
+const { MoltinClient } = require('@moltin/request')
+const moltin = new MoltinClient({
   client_id: process.env.MOLTIN_CLIENT_ID,
   client_secret: process.env.MOLTIN_CLIENT_SECRET,
   application: 'demo-sync-moltin-to-zendesk'
