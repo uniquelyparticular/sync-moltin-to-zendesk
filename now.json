@@ -1,6 +1,7 @@
 {
+  "version": 2,
   "name": "demo-sync-moltin-to-zendesk",
-  "alias": "particular-demo-sync-moltin-to-zendesk.now.sh",
+  "alias": "particular-sync-moltin-to-zendesk.now.sh",
   "env": {
     "NODE_ENV": "production",
     "ZENDESK_SUBDOMAIN": "@demo-zendesk-subdomain",
