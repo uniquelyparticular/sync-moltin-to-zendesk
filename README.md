@@ -1,7 +1,6 @@
 # @particular./sync-moltin-to-zendesk
 
-[![npm version](https://img.shields.io/npm/v/@particular./sync-moltin-to-zendesk.svg)](https://www.npmjs.com/package/@particular./sync-moltin-to-zendesk) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![CircleCI](https://img.shields.io/circleci/project/github/uniquelyparticular/sync-moltin-to-zendesk.svg?label=circleci)](https://circleci.com/gh/uniquelyparticular/sync-moltin-to-zendesk)
-![dependency status: david](https://img.shields.io/david/uniquelyparticular/sync-moltin-to-zendesk.svg)
+[![npm version](https://img.shields.io/npm/v/@particular./sync-moltin-to-zendesk.svg)](https://www.npmjs.com/package/@particular./sync-moltin-to-zendesk) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier) [![CircleCI](https://img.shields.io/circleci/project/github/uniquelyparticular/sync-moltin-to-zendesk.svg?label=circleci)](https://circleci.com/gh/uniquelyparticular/sync-moltin-to-zendesk) ![dependency status: david](https://img.shields.io/david/uniquelyparticular/sync-moltin-to-zendesk.svg)
 
 > Add a Zendesk Sunshine Event when an order is created or modified in Moltin
 
