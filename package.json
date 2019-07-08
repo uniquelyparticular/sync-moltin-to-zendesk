@@ -28,6 +28,9 @@
     "test": "jest --passWithNoTests",
     "semantic-release": "semantic-release"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
