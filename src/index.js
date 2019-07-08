@@ -86,7 +86,7 @@ module.exports = cors(async (req, res) => {
             display_price: {
               with_tax: { formatted: total_paid }
             },
-            timestamps: { created_at }
+            timestamps: { created_at, updated_at }
           },
           relationships: {
             items: { data: order_items },
@@ -110,13 +110,13 @@ module.exports = cors(async (req, res) => {
             source: 'moltin',
             type: `${observable}-${trigger}`,
             description: _toCamelcase(`${observable} ${trigger}`),
-            created_at,
             properties: {
               'Customer Name': customer_name,
               'Order ID': observable_id,
               'Order Status': order_status,
               'Order Total': total_paid,
               'Order Created': created_at,
+              'Order Updated': updated_at,
               'Order Number': order_number,
               'Order Items': order_items.filter(
                 item => item.type === 'cart_item'
