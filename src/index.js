@@ -84,7 +84,8 @@ module.exports = cors(async (req, res) => {
           meta: {
             display_price: {
               with_tax: { formatted: total_paid }
-            }
+            },
+            timestamps: { created_at }
           },
           relationships: {
             items: { data: order_items },
@@ -106,13 +107,14 @@ module.exports = cors(async (req, res) => {
           },
           event: {
             source: 'moltin',
-            type: `moltin-${observable}-${type}`,
-            description: _toCamelcase(`${observable} ${type}`),
+            type: `${observable}-${trigger}`,
+            description: _toCamelcase(`${observable} ${trigger}`),
             properties: {
               'Customer Name': customer_name,
               'Order ID': observable_id,
               'Order Status': order_status,
               'Order Total': total_paid,
+              'Order Created': created_at,
               'Payment Status': payment_status,
               'Shipping Status': shipping_status
             }
@@ -121,15 +123,11 @@ module.exports = cors(async (req, res) => {
         console.log('payload', payload)
 
         fetch(
-          `https://${
-            process.env.ZENDESK_SUBDOMAIN
-          }.zendesk.com/api/sunshine/track`,
+          `https://${process.env.ZENDESK_SUBDOMAIN}.zendesk.com/api/sunshine/track`,
           {
             headers: {
               Authorization: `Basic ${Buffer.from(
-                `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${
-                  process.env.ZENDESK_INTEGRATION_SECRET
-                }`
+                `${process.env.ZENDESK_INTEGRATION_EMAIL}/token:${process.env.ZENDESK_INTEGRATION_SECRET}`
               ).toString('base64')}`,
               Accept: 'application/json',
               'Content-Type': 'application/json'
