@@ -80,6 +80,7 @@ module.exports = cors(async (req, res) => {
           status: order_status,
           payment: payment_status,
           shipping: shipping_status,
+          transaction_id: order_number,
           customer: { name: customer_name, email: billing_email },
           meta: {
             display_price: {
@@ -109,12 +110,17 @@ module.exports = cors(async (req, res) => {
             source: 'moltin',
             type: `${observable}-${trigger}`,
             description: _toCamelcase(`${observable} ${trigger}`),
+            created_at,
             properties: {
               'Customer Name': customer_name,
               'Order ID': observable_id,
               'Order Status': order_status,
               'Order Total': total_paid,
               'Order Created': created_at,
+              'Order Number': order_number,
+              'Order Items': order_items.filter(
+                item => item.type === 'cart_item'
+              ).length,
               'Payment Status': payment_status,
               'Shipping Status': shipping_status
             }
