@@ -110,7 +110,6 @@ module.exports = cors(async (req, res) => {
             source: 'moltin',
             type: `${observable}-${trigger}`,
             description: _toCamelcase(`${observable} ${trigger}`),
-            created_at: updated_at,
             properties: {
               'Customer Name': customer_name,
               'Order ID': observable_id,
