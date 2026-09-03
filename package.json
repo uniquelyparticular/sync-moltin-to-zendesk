@@ -29,7 +29,7 @@
     "semantic-release": "semantic-release"
   },
   "engines": {
-    "node": "10.x"
+    "node": "24.x"
   },
   "husky": {
     "hooks": {
